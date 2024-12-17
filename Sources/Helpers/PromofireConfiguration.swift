@@ -82,17 +82,17 @@ extension Promofire {
         }
     }
     
-    func configureSDK(projectName: String, secret: String, userInfo: UserInfo? = nil) async throws {
+    func configureSDK(secret: String, userInfo: UserInfo? = nil) async throws {
         guard !isConfigured else { return }
         
         do {
             let authResult = try await AuthAPI.authControllerSignInViaSdk(
-                sdkAuthResuestPayload: .init(tenant: projectName, secret: secret)
+                sdkAuthResuestPayload: .init(secret: secret)
             )
             saveToken(authResult.accessToken)
             
             let customersResult = try await CustomersAPI.customersControllerCreatePreset(
-                createCustomerPresetDto: .init(platform: .ios)
+                createCustomerPresetRequestDto: .init(platform: .ios)
             )
             saveToken(customersResult.accessToken)
             

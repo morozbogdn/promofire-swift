@@ -14,12 +14,12 @@ internal class CodesAPI {
 
     /**
 
-     - parameter createCodeDto: (body)  
+     - parameter createCodeRequestDto: (body)  
      - returns: CodeDto
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func codesControllerCreate(createCodeDto: CreateCodeDto) async throws -> CodeDto {
-        return try await codesControllerCreateWithRequestBuilder(createCodeDto: createCodeDto).execute().body
+    internal class func codesControllerCreate(createCodeRequestDto: CreateCodeRequestDto) async throws -> CodeDto {
+        return try await codesControllerCreateWithRequestBuilder(createCodeRequestDto: createCodeRequestDto).execute().body
     }
 
     /**
@@ -27,13 +27,13 @@ internal class CodesAPI {
      - Bearer Token:
        - type: http
        - name: bearer
-     - parameter createCodeDto: (body)  
+     - parameter createCodeRequestDto: (body)  
      - returns: RequestBuilder<CodeDto> 
      */
-    internal class func codesControllerCreateWithRequestBuilder(createCodeDto: CreateCodeDto) -> RequestBuilder<CodeDto> {
+    internal class func codesControllerCreateWithRequestBuilder(createCodeRequestDto: CreateCodeRequestDto) -> RequestBuilder<CodeDto> {
         let localVariablePath = "/codes"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createCodeDto)
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createCodeRequestDto)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
@@ -50,12 +50,12 @@ internal class CodesAPI {
 
     /**
 
-     - parameter createCodesDto: (body)  
+     - parameter createCodesRequestDto: (body)  
      - returns: [CodeDto]
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func codesControllerCreateMany(createCodesDto: CreateCodesDto) async throws -> [CodeDto] {
-        return try await codesControllerCreateManyWithRequestBuilder(createCodesDto: createCodesDto).execute().body
+    internal class func codesControllerCreateMany(createCodesRequestDto: CreateCodesRequestDto) async throws -> [CodeDto] {
+        return try await codesControllerCreateManyWithRequestBuilder(createCodesRequestDto: createCodesRequestDto).execute().body
     }
 
     /**
@@ -63,13 +63,13 @@ internal class CodesAPI {
      - Bearer Token:
        - type: http
        - name: bearer
-     - parameter createCodesDto: (body)  
+     - parameter createCodesRequestDto: (body)  
      - returns: RequestBuilder<[CodeDto]> 
      */
-    internal class func codesControllerCreateManyWithRequestBuilder(createCodesDto: CreateCodesDto) -> RequestBuilder<[CodeDto]> {
+    internal class func codesControllerCreateManyWithRequestBuilder(createCodesRequestDto: CreateCodesRequestDto) -> RequestBuilder<[CodeDto]> {
         let localVariablePath = "/codes/batch"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createCodesDto)
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createCodesRequestDto)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 
@@ -186,12 +186,11 @@ internal class CodesAPI {
      - parameter offset: (query)  
      - parameter from: (query)  
      - parameter to: (query)  
-     - parameter codeValue: (query)  (optional)
      - returns: CodeRedeemsDto
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func codesControllerGetSelfRedeems(limit: Int, offset: Int, from: String, to: String, codeValue: String? = nil) async throws -> CodeRedeemsDto {
-        return try await codesControllerGetSelfRedeemsWithRequestBuilder(limit: limit, offset: offset, from: from, to: to, codeValue: codeValue).execute().body
+    internal class func codesControllerGetSelfRedeems(limit: Int, offset: Int, from: String, to: String) async throws -> CodeRedeemsDto {
+        return try await codesControllerGetSelfRedeemsWithRequestBuilder(limit: limit, offset: offset, from: from, to: to).execute().body
     }
 
     /**
@@ -203,17 +202,15 @@ internal class CodesAPI {
      - parameter offset: (query)  
      - parameter from: (query)  
      - parameter to: (query)  
-     - parameter codeValue: (query)  (optional)
      - returns: RequestBuilder<CodeRedeemsDto> 
      */
-    internal class func codesControllerGetSelfRedeemsWithRequestBuilder(limit: Int, offset: Int, from: String, to: String, codeValue: String? = nil) -> RequestBuilder<CodeRedeemsDto> {
+    internal class func codesControllerGetSelfRedeemsWithRequestBuilder(limit: Int, offset: Int, from: String, to: String) -> RequestBuilder<CodeRedeemsDto> {
         let localVariablePath = "/codes/redeems/me"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil
 
         var localVariableUrlComponents = URLComponents(string: localVariableURLString)
         localVariableUrlComponents?.queryItems = APIHelper.mapValuesToQueryItems([
-            "codeValue": (wrappedValue: codeValue?.encodeToJSON(), isExplode: true),
             "limit": (wrappedValue: limit.encodeToJSON(), isExplode: true),
             "offset": (wrappedValue: offset.encodeToJSON(), isExplode: true),
             "from": (wrappedValue: from.encodeToJSON(), isExplode: true),

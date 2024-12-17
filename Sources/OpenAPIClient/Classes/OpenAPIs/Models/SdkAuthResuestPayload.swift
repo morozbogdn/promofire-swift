@@ -12,16 +12,13 @@ import AnyCodable
 
 public final class SdkAuthResuestPayload: Codable, JSONEncodable, Hashable {
 
-    public var tenant: String
     public var secret: String
 
-    public init(tenant: String, secret: String) {
-        self.tenant = tenant
+    public init(secret: String) {
         self.secret = secret
     }
 
     public enum CodingKeys: String, CodingKey, CaseIterable {
-        case tenant
         case secret
     }
 
@@ -29,18 +26,15 @@ public final class SdkAuthResuestPayload: Codable, JSONEncodable, Hashable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(tenant, forKey: .tenant)
         try container.encode(secret, forKey: .secret)
     }
 
     public static func == (lhs: SdkAuthResuestPayload, rhs: SdkAuthResuestPayload) -> Bool {
-        lhs.tenant == rhs.tenant &&
         lhs.secret == rhs.secret
         
     }
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(tenant.hashValue)
         hasher.combine(secret.hashValue)
         
     }

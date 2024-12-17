@@ -10,14 +10,14 @@ import UIKit
 import SystemConfiguration
 
 public struct UserInfo {
-    var tenantId: String?
+    var customerUserId: String?
     var firstName: String?
     var lastName: String?
     var email: String?
     var phone: String?
     
-    public init(tenantId: String? = nil, firstName: String? = nil, lastName: String? = nil, email: String? = nil, phone: String? = nil) {
-        self.tenantId = tenantId
+    public init(customerUserId: String? = nil, firstName: String? = nil, lastName: String? = nil, email: String? = nil, phone: String? = nil) {
+        self.customerUserId = customerUserId
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
@@ -35,7 +35,7 @@ internal class DeviceDataCollector {
             appBuild: getAppBuild(),
             appVersion: getAppVersion(),
             sdkVersion: getSDKVersion(),
-            tenantAssignedId: userInfo?.tenantId,
+            tenantAssignedId: userInfo?.customerUserId,
             firstName: userInfo?.firstName,
             lastName: userInfo?.lastName,
             email: userInfo?.email,

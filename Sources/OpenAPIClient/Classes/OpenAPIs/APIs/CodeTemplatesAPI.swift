@@ -19,7 +19,7 @@ internal class CodeTemplatesAPI {
      - returns: CodeTemplatesDto
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func codeTemplatesControllerGetMany(limit: Double, offset: Double) async throws -> CodeTemplatesDto {
+    internal class func codeTemplatesControllerGetMany(limit: Int, offset: Int) async throws -> CodeTemplatesDto {
         return try await codeTemplatesControllerGetManyWithRequestBuilder(limit: limit, offset: offset).execute().body
     }
 
@@ -32,7 +32,7 @@ internal class CodeTemplatesAPI {
      - parameter offset: (query)  
      - returns: RequestBuilder<CodeTemplatesDto> 
      */
-    internal class func codeTemplatesControllerGetManyWithRequestBuilder(limit: Double, offset: Double) -> RequestBuilder<CodeTemplatesDto> {
+    internal class func codeTemplatesControllerGetManyWithRequestBuilder(limit: Int, offset: Int) -> RequestBuilder<CodeTemplatesDto> {
         let localVariablePath = "/code-templates"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
         let localVariableParameters: [String: Any]? = nil

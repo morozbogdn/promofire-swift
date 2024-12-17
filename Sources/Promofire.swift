@@ -18,12 +18,15 @@ public class Promofire {
     internal var pendingTasks: [(Any, Any)] = []
     
     private init() {
-        OpenAPIClientAPI.basePath = "https://api.promofire.io"
+        //TEST
+        //OpenAPIClientAPI.basePath = "https://api.promofire.io"
+        //PROD
+        OpenAPIClientAPI.basePath = "https://api.stage.promofire.io"
     }
     
-    public func configure(projectName: String, secret: String, userInfo: UserInfo? = nil) {
+    public func configure(secret: String, userInfo: UserInfo? = nil) {
         OpenAPIClientAPI.requestBuilderFactory = LoggingURLSessionRequestBuilderFactory()
-        configurationTask = Task { try await configureSDK(projectName: projectName, secret: secret, userInfo: userInfo) }
+        configurationTask = Task { try await configureSDK(secret: secret, userInfo: userInfo) }
     }
     
     public func isCodeGenerationAvailable() async -> Bool {
@@ -45,11 +48,11 @@ public class Promofire {
     
     public func getCurrentUserRedeems(limit: Int, offset: Int, from: Date, to: Date, codeValue: String? = nil) async throws -> CodeRedeemsDto  {
         try await withConfiguration {
-            try await CodesAPI.codesControllerGetSelfRedeems(limit: limit, offset: offset, from: ISODateFormatter.string(from: from), to: ISODateFormatter.string(from: to), codeValue: codeValue)
+            try await CodesAPI.codesControllerGetSelfRedeems(limit: limit, offset: offset, from: ISODateFormatter.string(from: from), to: ISODateFormatter.string(from: to))
         }
     }
     
-    public func getChampaigns(limit: Double, offset: Double) async throws -> CodeTemplatesDto {
+    public func getChampaigns(limit: Int, offset: Int) async throws -> CodeTemplatesDto {
         try await withConfiguration {
             try await CodeTemplatesAPI.codeTemplatesControllerGetMany(limit: limit, offset: offset)
         }
@@ -63,13 +66,13 @@ public class Promofire {
     
     public func generateCode(value: String, templateId: UUID, payload: [String: Any?]) async throws -> CodeDto {
         try await withConfiguration {
-            try await CodesAPI.codesControllerCreate(createCodeDto: .init(value: value, templateId: templateId, payload: AnyCodable(payload)))
+            try await CodesAPI.codesControllerCreate(createCodeRequestDto: .init(value: value, templateId: templateId, payload: AnyCodable(payload)))
         }
     }
     
-    public func generateCodes(_ params: CreateCodesDto) async throws -> [CodeDto] {
+    public func generateCodes(_ params: CreateCodesRequestDto) async throws -> [CodeDto] {
         try await withConfiguration {
-            try await CodesAPI.codesControllerCreateMany(createCodesDto: params)
+            try await CodesAPI.codesControllerCreateMany(createCodesRequestDto: params)
         }
     }
     

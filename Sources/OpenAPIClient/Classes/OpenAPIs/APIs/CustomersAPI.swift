@@ -14,12 +14,12 @@ internal class CustomersAPI {
 
     /**
 
-     - parameter createCustomerPresetDto: (body)  
+     - parameter createCustomerPresetRequestDto: (body)  
      - returns: AuthResponsePayload
      */
     @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
-    internal class func customersControllerCreatePreset(createCustomerPresetDto: CreateCustomerPresetDto) async throws -> AuthResponsePayload {
-        return try await customersControllerCreatePresetWithRequestBuilder(createCustomerPresetDto: createCustomerPresetDto).execute().body
+    internal class func customersControllerCreatePreset(createCustomerPresetRequestDto: CreateCustomerPresetRequestDto) async throws -> AuthResponsePayload {
+        return try await customersControllerCreatePresetWithRequestBuilder(createCustomerPresetRequestDto: createCustomerPresetRequestDto).execute().body
     }
 
     /**
@@ -27,13 +27,13 @@ internal class CustomersAPI {
      - Bearer Token:
        - type: http
        - name: bearer
-     - parameter createCustomerPresetDto: (body)  
+     - parameter createCustomerPresetRequestDto: (body)  
      - returns: RequestBuilder<AuthResponsePayload> 
      */
-    internal class func customersControllerCreatePresetWithRequestBuilder(createCustomerPresetDto: CreateCustomerPresetDto) -> RequestBuilder<AuthResponsePayload> {
+    internal class func customersControllerCreatePresetWithRequestBuilder(createCustomerPresetRequestDto: CreateCustomerPresetRequestDto) -> RequestBuilder<AuthResponsePayload> {
         let localVariablePath = "/customers/preset"
         let localVariableURLString = OpenAPIClientAPI.basePath + localVariablePath
-        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createCustomerPresetDto)
+        let localVariableParameters = JSONEncodingHelper.encodingParameters(forEncodableObject: createCustomerPresetRequestDto)
 
         let localVariableUrlComponents = URLComponents(string: localVariableURLString)
 

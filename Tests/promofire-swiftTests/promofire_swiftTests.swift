@@ -25,10 +25,9 @@ import XCTest
 class PromofireIntegrationTests: XCTestCase {
     // MARK: - Properties
     var sut: Promofire!
-    let projectName = "YOUR_PROJECT_NAME"
-    let secret = "YOUR_SECRET"
+    let secret = "77c00df8aa736122375090361d0388dffb5d550cc334b6f80e768a8579c71f02"
     let userInfo = UserInfo(
-        tenantId: "testId",
+        customerUserId: "testId",
         firstName: "test",
         lastName: "test",
         email: "test@gmail.com",
@@ -54,7 +53,7 @@ class PromofireIntegrationTests: XCTestCase {
     // MARK: - Configuration Tests
     func testSDKConfiguration() async throws {
         // When
-        sut.configure(projectName: projectName, secret: secret, userInfo: userInfo)
+        sut.configure(secret: secret, userInfo: userInfo)
         try await Task.sleep(nanoseconds: 1_000_000_000)
         
         // Then
@@ -234,7 +233,7 @@ class PromofireIntegrationTests: XCTestCase {
     
     // MARK: - Helper Methods
     private func configureSDK() async throws {
-        sut.configure(projectName: projectName, secret: secret, userInfo: userInfo)
+        sut.configure(secret: secret, userInfo: userInfo)
         try await Task.sleep(nanoseconds: 1_000_000_000)
         
         guard await sut.isCodeGenerationAvailable() else {
