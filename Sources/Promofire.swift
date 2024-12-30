@@ -26,7 +26,22 @@ public class Promofire {
     
     public func configure(secret: String, userInfo: UserInfo? = nil) {
         OpenAPIClientAPI.requestBuilderFactory = LoggingURLSessionRequestBuilderFactory()
-        configurationTask = Task { try await configureSDK(secret: secret, userInfo: userInfo) }
+        
+        configurationTask = Task {
+            if let existingToken = TokenStorage.shared.getToken() {
+                OpenAPIClientAPI.customHeaders["Authorization"] = "Bearer \(existingToken)"
+                
+                do {
+                    try await validateExistingConfiguration()
+                    isConfigured = true
+                } catch {
+                    isConfigured = false
+                    try await configureSDK(secret: secret, userInfo: userInfo)
+                }
+            } else {
+                try await configureSDK(secret: secret, userInfo: userInfo)
+            }
+        }
     }
     
     public func isCodeGenerationAvailable() async -> Bool {

@@ -82,31 +82,38 @@ extension Promofire {
         }
     }
     
-    func configureSDK(secret: String, userInfo: UserInfo? = nil) async throws {
+    internal func validateExistingConfiguration() async throws {
+        let templates = try await CodeTemplatesAPI.codeTemplatesControllerGetMany(limit: 1, offset: 0)
+        _isCodeGenerationAvailable = !templates.templates.isEmpty
+    }
+    
+    internal func performInitialConfiguration(secret: String, userInfo: UserInfo?) async throws {
+        let authResult = try await AuthAPI.authControllerSignInViaSdk(
+            sdkAuthResuestPayload: .init(secret: secret)
+        )
+        saveToken(authResult.accessToken)
+        
+        let customersResult = try await CustomersAPI.customersControllerCreatePreset(
+            createCustomerPresetRequestDto: .init(platform: .ios)
+        )
+        saveToken(customersResult.accessToken)
+        
+        let result = try await CustomersAPI.customersControllerUpsert(
+            createCustomerRequestDto: DeviceDataCollector.createCustomerRequest(userInfo)
+        )
+        saveToken(result.accessToken)
+        
+        let templates = try await CodeTemplatesAPI.codeTemplatesControllerGetMany(limit: 1, offset: 0)
+        _isCodeGenerationAvailable = !templates.templates.isEmpty
+    }
+    
+    internal func configureSDK(secret: String, userInfo: UserInfo? = nil) async throws {
         guard !isConfigured else { return }
         
         do {
-            let authResult = try await AuthAPI.authControllerSignInViaSdk(
-                sdkAuthResuestPayload: .init(secret: secret)
-            )
-            saveToken(authResult.accessToken)
-            
-            let customersResult = try await CustomersAPI.customersControllerCreatePreset(
-                createCustomerPresetRequestDto: .init(platform: .ios)
-            )
-            saveToken(customersResult.accessToken)
-            
-            let result = try await CustomersAPI.customersControllerUpsert(
-                createCustomerRequestDto: DeviceDataCollector.createCustomerRequest(userInfo)
-            )
-            saveToken(result.accessToken)
-            
-            let templates = try await CodeTemplatesAPI.codeTemplatesControllerGetMany(limit: 1, offset: 0)
-            _isCodeGenerationAvailable = !templates.templates.isEmpty
-            
+            try await performInitialConfiguration(secret: secret, userInfo: userInfo)
             isConfigured = true
             await state.executeAll()
-            
         } catch {
             isConfigured = false
             await state.cancelAll(with: error)
